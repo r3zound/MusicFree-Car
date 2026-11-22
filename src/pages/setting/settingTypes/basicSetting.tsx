@@ -275,7 +275,7 @@ export default function BasicSetting() {
                 createSwitch(
                     t("basicSettings.autoPlayWhenAppStart"),
                     "basic.autoPlayWhenAppStart",
-                    autoPlayWhenAppStart ?? false,
+                    autoPlayWhenAppStart ?? true,
                 ),
                 createSwitch(
                     t("basicSettings.tryChangeSourceWhenPlayFail"),

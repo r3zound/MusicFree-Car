@@ -278,8 +278,8 @@ async function extraMakeup() {
         handleLinkingUrl(initUrl);
     }
 
-    if (Config.getConfig("basic.autoPlayWhenAppStart")) {
-        TrackPlayer.play();
+    if (!initUrl && TrackPlayer.currentMusic && (Config.getConfig("basic.autoPlayWhenAppStart") ?? true)) {
+        void TrackPlayer.play();
     }
 }
 

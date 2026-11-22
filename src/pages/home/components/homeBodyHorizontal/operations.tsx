@@ -2,8 +2,7 @@ import { useI18N } from "@/core/i18n";
 import { ROUTE_PATH, useNavigate } from "@/core/router";
 import rpx from "@/utils/rpx";
 import React from "react";
-import { StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { StyleSheet, View } from "react-native";
 import ActionButton from "../ActionButton";
 
 export default function Operations() {
@@ -43,18 +42,15 @@ export default function Operations() {
     ] as const;
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             {actionButtons.map((action, index) => (
                 <ActionButton
-                    style={[
-                        styles.actionButtonStyle,
-                        index % 4 ? styles.actionMarginLeft : null,
-                    ]}
+                    style={[styles.actionButton, index > 0 && styles.actionGap]}
                     key={action.title}
                     {...action}
                 />
             ))}
-        </ScrollView>
+        </View>
     );
 }
 
@@ -64,16 +60,17 @@ const styles = StyleSheet.create({
         flexGrow: 0,
         flexShrink: 0,
         paddingHorizontal: rpx(24),
-        marginVertical: rpx(32),
-        flexDirection: "row",
-        flexWrap: "wrap",
+        paddingVertical: 8,
     },
-    actionButtonStyle: {
-        width: rpx(157.5),
-        height: rpx(160),
-        borderRadius: rpx(18),
+    actionButton: {
+        width: "100%",
+        height: undefined,
+        flexBasis: 0,
+        flexGrow: 1,
+        flexShrink: 1,
+        borderRadius: 8,
     },
-    actionMarginLeft: {
-        marginTop: rpx(24),
+    actionGap: {
+        marginTop: 8,
     },
 });

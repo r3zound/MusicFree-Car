@@ -153,30 +153,24 @@ class TrackPlayer extends EventEmitter<{
         }
 
         if (track && this.isInPlayList(track)) {
-            if (!this.configService.getConfig("basic.autoPlayWhenAppStart")) {
+            if (this.configService.getConfig("basic.autoPlayWhenAppStart") === false) {
                 track.isInit = true;
             }
 
-            // 异步
-            this.pluginManagerService.getByMedia(track)
-                ?.methods.getMediaSource(track, quality)
-                .then(async newSource => {
-                    track.url = newSource?.url || track.url;
-                    track.headers = newSource?.headers || track.headers;
-
-                    if (isSameMediaItem(this.currentMusic, track)) {
-                        await this.setTrackSource(track as Track, false);
-                        if (progress) {
-                            // 异步
-                            this.seekTo(progress);
-                        }
-                    }
-                });
             this.setCurrentMusic(track);
-
-            if (progress) {
-                // 异步
-                this.seekTo(progress);
+            try {
+                const newSource = await this.pluginManagerService.getByMedia(track)
+                    ?.methods.getMediaSource(track, quality);
+                if (newSource?.url && isSameMediaItem(this.currentMusic, track)) {
+                    track.url = newSource.url;
+                    track.headers = newSource.headers || track.headers;
+                    await this.setTrackSource(track as Track, false);
+                    if (progress) {
+                        await this.seekTo(progress);
+                    }
+                }
+            } catch (error) {
+                trace("Restore last track failed", error);
             }
         }
 
